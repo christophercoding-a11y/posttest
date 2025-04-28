@@ -62,6 +62,39 @@ const dao = {
                 }
             )
         }
+    },
+
+    update: (req, res, table,)=> {
+        // if is not a number => or userId
+        if(isNaN(req.params.id)) {
+            res.json({
+                "error": true,
+                "message": "Id must be a number"
+            })
+        } else if (Object.keys(req.body).length === 0) {
+            res.json({
+                "error": true,
+                "message": "No fields to update"
+            })
+        } else {
+            const fields = Object.keys(req.body)
+            const values = Object.values(req.body)
+
+            con.execute(
+                // STRING, ARRAY, CALLBACK FUNCTION
+                `UPDATE ${table} SET ${fields.join(' = ?, ')} = ? WHERE user_id = ?;`,
+
+                [...values, res.params.id],
+                (error, dbres)=> {
+                    if(!error) {
+                        res.send(`Changed ${dbres.changedRows} rows(s)`)
+                    } else {
+                        console.log('Dao Error:', error)
+                        res.send('Error updating record')
+                    }
+                }
+            )
+        }
     }
 }
 

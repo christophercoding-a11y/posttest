@@ -36,6 +36,22 @@ router.get('/user', (req, res)=> {
         })
 })
 
+// user single
+router.get('/user/:id', (req, res)=> {
+    const id = req.params.id
+
+    const url = `http://localhost:${port}/api/user/${id}`
+
+    axios.get(url)
+        .then(resp => {
+            res.render('pages/userSingle', {
+                title: `${resp.data.first_name} ${resp.data.last_name}`,
+                name: `${resp.data.first_name} ${resp.data.last_name}`,
+                data: resp.data
+        })
+    })
+})
+
 //userForm
 router.get('/userForm', (req, res)=> {
 
@@ -45,6 +61,35 @@ router.get('/userForm', (req, res)=> {
     })
 })
 
+
+
+// router.post('/api/user/post', (req, res)=> {
+//     axios.post(`http://localhost:${port}/api/user/post`,
+//         {
+//             first_name: req.body.first_name.toLowerCase(),
+//             last_name: req.body.last_name.toLowerCase(),
+//             email: req.body.email.toLowerCase(),
+//             password: req.body.password,
+//             imgUrl: req.body.imgUrl
+//         }
+//     ).then(resp => {
+//         console.log('this works!', resp)
+//     }).catch(err => {
+//         console.log(err)
+//     })
+// })
+
+
+// editPassword
+router.get('/editPassword/:userId', (req, res)=> {
+    const userId = req.params.userId
+
+    res.render('pages/editPassword', {
+        title: 'Edit Password',
+        name: 'Edit Password',
+        userId
+    })
+})
 
 
 

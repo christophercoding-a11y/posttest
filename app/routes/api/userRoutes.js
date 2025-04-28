@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const axios = require('axios')
 
 
 const dao = require('../../daos/dao')
@@ -14,5 +15,10 @@ router.get('/:id', (req, res)=> {
 router.post('/post', (req, res)=> {
     dao.create(req, res, dao.table)
 })
+
+router.patch('/update', (req, res)=> {
+    dao.update(req, res, dao.table)
+})
+
 
 module.exports = router
