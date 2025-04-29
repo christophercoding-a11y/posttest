@@ -64,9 +64,9 @@ const dao = {
         }
     },
 
-    update: (req, res, table,)=> {
-        // if is not a number => or userId
-        if(isNaN(req.params.id)) {
+    update: (req, res, table, userId)=> {
+        // if is not a number => id or userId
+        if(isNaN(userId)) {
             res.json({
                 "error": true,
                 "message": "Id must be a number"
@@ -84,7 +84,7 @@ const dao = {
                 // STRING, ARRAY, CALLBACK FUNCTION
                 `UPDATE ${table} SET ${fields.join(' = ?, ')} = ? WHERE user_id = ?;`,
 
-                [...values, res.params.id],
+                [...values, userId],
                 (error, dbres)=> {
                     if(!error) {
                         res.send(`Changed ${dbres.changedRows} rows(s)`)
