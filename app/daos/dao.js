@@ -64,7 +64,8 @@ const dao = {
         }
     },
 
-    update: (req, res, table, userId)=> {
+    update: (req, res, table)=> {
+        const userId = req.body.user_id
         // if is not a number => id or userId
         if(isNaN(userId)) {
             res.json({

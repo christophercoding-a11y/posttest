@@ -37,20 +37,35 @@ router.get('/user', (req, res)=> {
 })
 
 // user single
-router.get('/user/:id', (req, res)=> {
+router.get('/user/:id', (req, res, next)=> {
     const id = req.params.id
 
-    const url = `http://localhost:${port}/api/user/${id}`
-
-    axios.get(url)
-        .then(resp => {
-            res.render('pages/userSingle', {
-                title: `${resp.data.first_name} ${resp.data.last_name}`,
-                name: `${resp.data.first_name} ${resp.data.last_name}`,
-                data: resp.data
+    if (isNaN(id)) {
+        res.render('pages/error',{
+            title: 'Error',
+            name: 'Error',
         })
-    })
+
+        try {
+            throw new Error('invalid id')
+        } catch (err) {
+            next(err)
+        }
+    } else {
+        const url = `http://localhost:${port}/api/user/${id}`
+    
+        axios.get(url)
+            .then(resp => {
+                res.render('pages/userSingle', {
+                    title: `${resp.data.first_name} ${resp.data.last_name}`,
+                    name: `${resp.data.first_name} ${resp.data.last_name}`,
+                    data: resp.data
+            })
+        })
+
+    }
 })
+
 
 //userForm
 router.get('/userForm', (req, res)=> {
@@ -91,6 +106,27 @@ router.get('/editPassword/:userId', (req, res)=> {
     })
 })
 
+router.post('/update/:userId', (req, res)=> {
+
+    axios.patch(`http://localhost:${port}/api/user/update`, {
+        user_id: req.params.userId,
+        password: req.body.password
+    }).then(resp => {
+        res.render('pages/editSuccess', {
+            title: 'Success',
+            name: 'Success'
+        })
+    }).catch(error => console.log(error))
+})
+
+
+router.all('/{*any}', (req, res, next)=> {
+        res.render('pages/error', {
+            title: '404 Error',
+            name: '404'
+        })
+    
+})
 
 
 

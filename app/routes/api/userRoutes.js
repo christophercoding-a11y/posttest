@@ -16,7 +16,7 @@ router.post('/post', (req, res)=> {
     dao.create(req, res, dao.table)
 })
 
-router.patch('/update/:userId', (req, res)=> {
+router.patch('/update', (req, res)=> {
     // console.log(req.body)
     dao.update(req, res, dao.table, req.params.userId)
 })
